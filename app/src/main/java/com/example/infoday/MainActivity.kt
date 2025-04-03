@@ -16,8 +16,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.infoday.ui.theme.InfoDayTheme
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -25,6 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             InfoDayTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -33,12 +40,21 @@ class MainActivity : ComponentActivity() {
                             title = { Text("HKBU InfoDay App") }
                         )
                     },
-                    bottomBar = { BottomNavBar() }
+                    bottomBar = { BottomNavBar(navController) }
                 ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    // Replace Greeting() with NavHost
+                    NavHost(
+                        navController = navController, // reference to your nav controller
+                        startDestination = "home", // default screen to display
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+                        composable("home") { // composable for "home" screen
+                            Greeting("Android") // screen to display for "home"
+                        }
+                        composable("info") { // composable for "info" screen
+                            InfoScreen() // screen to display for "info"
+                        }
+                    }
                 }
             }
         }
@@ -46,19 +62,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BottomNavBar() {
-    // Define a list of navigation items
+fun BottomNavBar(navController: NavController) {
+    // A list of items
     val items = listOf("Home", "Events", "Itin", "Map", "Info")
-    var selectedItem: Int? = null
+    val selectedItem = remember { mutableIntStateOf(0) }
 
     NavigationBar {
-        // Iterate over the items list and create a NavigationBarItem for each item
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
                 label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
+                selected = selectedItem.intValue == index,
+                onClick = {
+                    selectedItem.intValue = index
+                    when (index) {
+                        0 -> navController.navigate("home")
+                        4 -> navController.navigate("info")
+                    }
+                }
             )
         }
     }
