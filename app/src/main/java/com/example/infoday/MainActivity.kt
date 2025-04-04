@@ -16,8 +16,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -47,7 +49,9 @@ class MainActivity : ComponentActivity() {
                         navController = navController, // reference to your nav controller
                         startDestination = "home", // default screen to display
                         modifier = Modifier.padding(innerPadding)
+
                     ) {
+                        composable("map") { MapScreen() }
                         composable("home") { // composable for "home" screen
                             Greeting("Android") // screen to display for "home"
                         }
@@ -65,18 +69,19 @@ class MainActivity : ComponentActivity() {
 fun BottomNavBar(navController: NavController) {
     // A list of items
     val items = listOf("Home", "Events", "Itin", "Map", "Info")
-    val selectedItem = remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(0) }
 
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
                 label = { Text(item) },
-                selected = selectedItem.intValue == index,
+                selected = selectedItem == index,
                 onClick = {
-                    selectedItem.intValue = index
+                    selectedItem = index
                     when (index) {
                         0 -> navController.navigate("home")
+                        3 -> navController.navigate("map")
                         4 -> navController.navigate("info")
                     }
                 }
