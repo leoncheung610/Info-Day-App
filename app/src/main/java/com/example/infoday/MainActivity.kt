@@ -58,6 +58,14 @@ class MainActivity : ComponentActivity() {
                         composable("info") { // composable for "info" screen
                             InfoScreen() // screen to display for "info"
                         }
+                        // Composable for DeptScreen
+                        composable("dept") {
+                            DeptScreen(navController) }
+// Composable for EventScreen with an argument
+                        composable("event/{deptId}") { backStackEntry ->
+                            // Extract the department id from the NavBackStackEntry's arguments
+                            EventScreen(backStackEntry.arguments?.getString("deptId")?:"")
+                        }
                     }
                 }
             }
@@ -81,6 +89,8 @@ fun BottomNavBar(navController: NavController) {
                     selectedItem = index
                     when (index) {
                         0 -> navController.navigate("home")
+                        // NavHostComposable
+                        1 -> navController.navigate("dept")
                         3 -> navController.navigate("map")
                         4 -> navController.navigate("info")
                     }
