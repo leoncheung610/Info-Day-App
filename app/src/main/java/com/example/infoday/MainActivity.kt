@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
                             // Extract the department id from the NavBackStackEntry's arguments
                             EventScreen(backStackEntry.arguments?.getString("deptId")?:"")
                         }
+                        composable("home") { FeedScreen() }
                     }
                 }
             }
