@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.infoday.DataStoreInstance.DARK_MODE
 import com.example.infoday.ui.theme.InfoDayTheme
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -33,8 +35,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val darkMode by DataStoreInstance.getBooleanPreferences(this, DARK_MODE)
+                .collectAsState(initial = false)
             val navController = rememberNavController()
-            InfoDayTheme {
+            InfoDayTheme (darkTheme = darkMode == true){
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
