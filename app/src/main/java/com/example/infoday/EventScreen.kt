@@ -1,5 +1,7 @@
 package com.example.infoday
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +27,7 @@ import androidx.compose.runtime.getValue
 data class Event(
     @PrimaryKey val id: Int, val title: String, val deptId: String, var saved: Boolean
 )
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EventScreen(snackbarHostState: SnackbarHostState, deptId: String?) {
 
@@ -36,20 +39,18 @@ fun EventScreen(snackbarHostState: SnackbarHostState, deptId: String?) {
         items(events.filter { it.deptId == deptId }) { event ->
             ListItem(
                 headlineContent = { Text(event.title) },
-                modifier = Modifier.pointerInput(Unit) {
-                    detectTapGestures(
-                        onLongPress = {
-                            coroutineScope.launch {
-                                event.saved = true
-                                eventDao.update(event)
-                                snackbarHostState.showSnackbar(
-                                    "Event '${event.title}' has been added to itinerary."
-                                )
-                            }
+                modifier = Modifier.combinedClickable(
+                    onClick = { /* Handle click */ },
+                    onLongClick = {
+                        coroutineScope.launch {
+                            event.saved = true
+                            eventDao.update(event)
+                            snackbarHostState.showSnackbar(
+                                "Event '${event.title}' has been added to itinerary."
+                            )
                         }
-                    )
-                } ,
-
+                    }
+                )
             )
             HorizontalDivider()
         }
