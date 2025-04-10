@@ -13,51 +13,36 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.example.infoday.ui.theme.InfoDayTheme
 import kotlinx.coroutines.launch
 
 import androidx.compose.runtime.getValue
 
-@Entity(tableName = "event")
-data class Event(
-    @PrimaryKey val id: Int, val title: String, val deptId: String, var saved: Boolean
-)
 @Composable
-fun EventScreen(snackbarHostState: SnackbarHostState, deptId: String?) {
-
+fun ItineraryScreen(snackbarHostState: SnackbarHostState) {
     val eventDao = EventDatabase.getInstance(LocalContext.current).eventDao()
-    val events by eventDao.getAll().collectAsState(initial = emptyList())
+    val events by eventDao.getItinerary().collectAsState(initial = emptyList())
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn {
-        items(events.filter { it.deptId == deptId }) { event ->
+        items(events) { event ->
             ListItem(
                 headlineContent = { Text(event.title) },
                 modifier = Modifier.pointerInput(Unit) {
                     detectTapGestures(
                         onLongPress = {
                             coroutineScope.launch {
-                                event.saved = true
+                                event.saved = false
                                 eventDao.update(event)
                                 snackbarHostState.showSnackbar(
-                                    "Event '${event.title}' has been added to itinerary."
+                                    "Event '${event.title}' has been removed from itinerary."
                                 )
                             }
                         }
                     )
                 } ,
 
-            )
+                )
             HorizontalDivider()
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EventPreview() {
-
 }

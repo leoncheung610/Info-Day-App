@@ -13,6 +13,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -38,8 +40,10 @@ class MainActivity : ComponentActivity() {
             val darkMode by DataStoreInstance.getBooleanPreferences(this, DARK_MODE)
                 .collectAsState(initial = false)
             val navController = rememberNavController()
+            val snackbarHostState = remember { SnackbarHostState() }
             InfoDayTheme (darkTheme = darkMode == true){
                 Scaffold(
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         TopAppBar(
@@ -55,6 +59,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
 
                     ) {
+                        composable("Itin"){ItineraryScreen(snackbarHostState)}
                         composable("map") { MapScreen() }
                         composable("home") { // composable for "home" screen
                             Greeting("Android") // screen to display for "home"
@@ -68,7 +73,7 @@ class MainActivity : ComponentActivity() {
 // Composable for EventScreen with an argument
                         composable("event/{deptId}") { backStackEntry ->
                             // Extract the department id from the NavBackStackEntry's arguments
-                            EventScreen(backStackEntry.arguments?.getString("deptId")?:"")
+                            EventScreen(snackbarHostState, backStackEntry.arguments?.getString("deptId")?:"")
                         }
                         composable("home") { FeedScreen() }
                     }
@@ -96,6 +101,7 @@ fun BottomNavBar(navController: NavController) {
                         0 -> navController.navigate("home")
                         // NavHostComposable
                         1 -> navController.navigate("dept")
+                        2 -> navController.navigate("Itin")
                         3 -> navController.navigate("map")
                         4 -> navController.navigate("info")
                     }
