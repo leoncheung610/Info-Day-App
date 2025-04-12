@@ -1,7 +1,9 @@
 package com.example.infoday
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -31,6 +33,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.example.infoday.DataStoreInstance.DARK_MODE
 import com.example.infoday.ui.theme.InfoDayTheme
 import kotlinx.coroutines.launch
@@ -63,9 +66,15 @@ data class Contact(val office: String, val tel: String) {
 
 @Composable
 fun PhoneList() {
+    val context = LocalContext.current
     Column {
         Contact.data.forEach { message ->
             ListItem(
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_DIAL)
+                    intent.data = "tel:${message.tel}".toUri()
+                    context.startActivity(intent)
+                },
                 headlineContent = { Text(message.office) },
                 leadingContent = {
                     Icon(

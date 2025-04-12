@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -109,6 +110,7 @@ fun BottomNavBar(navController: NavController) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
+                modifier = Modifier.testTag(item),
                 label = { Text(item) },
                 selected = selectedItem == index,
                 onClick = {
