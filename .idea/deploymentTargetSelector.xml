@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-04-04T10:44:49.116343Z">
+        <DropdownSelection timestamp="2025-04-12T11:57:23.612441300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leon6\.android\avd\Pixel_9.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leon6\.android\avd\Pixel_9_2.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -21,10 +21,10 @@
       </SelectionState>
       <SelectionState runConfigName="MyUiTest">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-04-12T08:26:40.395043500Z">
+        <DropdownSelection timestamp="2025-04-12T11:55:11.904805200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leon6\.android\avd\Pixel_9.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leon6\.android\avd\Pixel_9_2.avd" />
             </handle>
           </Target>
         </DropdownSelection>
